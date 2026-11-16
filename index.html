@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Track cash and UPI expenses, import SBI UPI statements, get budget reminders, and review monthly reports."
+    />
+    <meta name="theme-color" content="#080c16" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <title>Paisa — Personal Finance Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Paisa dashboard home">
+          <span class="brand-mark" aria-hidden="true">₹</span>
+          <span>Paisa<span class="brand-dot">.</span></span>
+        </a>
+        <div class="topbar-note">
+          <button id="install-button" class="install-button" type="button">Install app</button>
+          <span class="save-indicator" aria-hidden="true"></span>
+          <span id="storage-caption" class="save-caption">Connecting to local database…</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="page-heading" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">PERSONAL FINANCE</p>
+            <h1 id="page-title">Your money, in focus.</h1>
+            <p class="page-subtitle">A clearer view of your everyday spending.</p>
+          </div>
+          <label class="month-picker">
+            <span>Viewing month</span>
+            <input id="month-picker" type="month" />
+          </label>
+        </section>
+
+        <section class="summary-grid" aria-label="Monthly summary">
+          <article class="summary-card summary-primary">
+            <span class="summary-label">Total spent</span>
+            <strong id="total-spent" class="summary-value">₹0</strong>
+            <span id="transaction-count" class="summary-footnote">0 transactions this month</span>
+            <span class="summary-decoration" aria-hidden="true">₹</span>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">Monthly budget</span>
+            <strong id="total-budget" class="summary-value">₹0</strong>
+            <span class="summary-footnote">Across all categories</span>
+            <span class="summary-icon budget-icon" aria-hidden="true">↗</span>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">Available</span>
+            <strong id="remaining-budget" class="summary-value">₹0</strong>
+            <span id="remaining-caption" class="summary-footnote">Set budgets to see your balance</span>
+            <span class="summary-icon remaining-icon" aria-hidden="true">✓</span>
+          </article>
+          <article class="summary-card">
+            <span class="summary-label">UPI spending</span>
+            <strong id="upi-total" class="summary-value">₹0</strong>
+            <span id="cash-total" class="summary-footnote">Cash: ₹0</span>
+            <span class="summary-icon upi-icon" aria-hidden="true">⌁</span>
+          </article>
+        </section>
+
+        <section id="budget-alerts" class="budget-alerts" aria-labelledby="budget-alerts-title" aria-live="polite" hidden>
+          <div class="budget-alerts-heading">
+            <span class="budget-alert-icon" aria-hidden="true">!</span>
+            <h2 id="budget-alerts-title">Budget reminders</h2>
+          </div>
+          <ul id="budget-alert-list"></ul>
+        </section>
+
+        <div class="main-grid">
+          <section class="panel expense-panel" aria-labelledby="expense-heading">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">QUICK ENTRY</p>
+                <h2 id="expense-heading">Add an expense</h2>
+              </div>
+              <span class="panel-heading-icon" aria-hidden="true">＋</span>
+            </div>
+            <form id="expense-form" class="expense-form">
+              <label class="field field-amount">
+                <span>Amount</span>
+                <span class="amount-input-wrap">
+                  <span aria-hidden="true">₹</span>
+                  <input
+                    id="expense-amount"
+                    name="amount"
+                    type="number"
+                    min="0.01"
+                    max="99999999"
+                    step="0.01"
+                    inputmode="decimal"
+                    placeholder="0.00"
+                    required
+                  />
+                </span>
+              </label>
+              <label class="field">
+                <span>What was it for?</span>
+                <input
+                  id="expense-title"
+                  name="title"
+                  type="text"
+                  maxlength="70"
+                  placeholder="e.g. Lunch with friends"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Category</span>
+                <select id="expense-category" name="category" required></select>
+              </label>
+              <label class="field">
+                <span>Paid using</span>
+                <select id="expense-method" name="method" required>
+                  <option value="upi">UPI</option>
+                  <option value="cash">Cash</option>
+                </select>
+              </label>
+              <label class="field field-date">
+                <span>Date</span>
+                <input id="expense-date" name="date" type="date" required />
+              </label>
+              <button class="button button-primary" type="submit">
+                <span aria-hidden="true">＋</span>
+                Add expense
+              </button>
+              <p id="form-message" class="form-message" aria-live="polite"></p>
+            </form>
+          </section>
+
+          <section class="panel chart-panel" aria-labelledby="chart-title">
+            <div class="panel-heading chart-heading">
+              <div>
+                <p class="eyebrow">WHERE IT GOES</p>
+                <h2 id="chart-title">Spending by category</h2>
+              </div>
+              <span class="period-label" id="chart-period"></span>
+            </div>
+            <div class="chart-layout">
+              <div class="chart-wrap">
+                <canvas
+                  id="spending-chart"
+                  role="img"
+                  aria-label="Pie chart showing monthly spending by category"
+                ></canvas>
+                <div id="chart-empty" class="chart-empty" hidden>
+                  <span aria-hidden="true">◒</span>
+                  <p>Add an expense to see your chart</p>
+                </div>
+              </div>
+              <ul id="chart-legend" class="chart-legend" aria-label="Spending by category legend"></ul>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel budgets-panel" aria-labelledby="budgets-title">
+          <div class="panel-heading budgets-heading">
+            <div>
+              <p class="eyebrow">STAY ON TRACK</p>
+              <h2 id="budgets-title">Monthly category budgets</h2>
+              <p class="panel-description">Set a spending limit for each category.</p>
+              <p id="notification-hint" class="panel-description notification-hint">
+                In-app warnings start at 80% and when a budget is exceeded.
+              </p>
+            </div>
+            <div class="budget-actions">
+              <button id="notification-button" class="button button-secondary" type="button">
+                Enable browser alerts
+              </button>
+              <button class="button button-secondary" type="submit" form="budget-form">
+                Save budgets
+              </button>
+            </div>
+          </div>
+          <form id="budget-form" class="budget-grid" aria-label="Set monthly category budgets"></form>
+        </section>
+
+        <section class="panel statement-panel" aria-labelledby="statement-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">SBI STATEMENT</p>
+              <h2 id="statement-title">Import UPI transactions</h2>
+            </div>
+            <span class="panel-heading-icon" aria-hidden="true">↥</span>
+          </div>
+          <p class="panel-description statement-description">
+            Choose an SBI CSV or text-based PDF statement. Paisa reads it on this device and imports only UPI debit
+            rows. Scanned PDFs are not supported. Review the transactions and choose their categories before importing.
+            <a class="sample-statement-link" href="samples/sample-sbi-upi-statement.pdf" download>
+              Download a clearly marked demo PDF
+            </a>
+          </p>
+          <label class="field statement-file-field">
+            <span>SBI statement CSV or PDF</span>
+            <input id="statement-file" type="file" accept=".csv,.pdf,text/csv,application/pdf" disabled />
+          </label>
+          <p id="statement-message" class="import-message" role="alert"></p>
+          <div id="statement-preview" class="statement-preview" hidden>
+            <p id="statement-summary" class="import-summary" aria-live="polite"></p>
+            <div class="transaction-table-wrap">
+              <table class="transaction-table import-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">UPI details</th>
+                    <th scope="col" class="amount-column">Debit</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Import status</th>
+                  </tr>
+                </thead>
+                <tbody id="statement-rows"></tbody>
+              </table>
+            </div>
+            <button id="import-button" class="button button-primary import-button" type="button" disabled>
+              Import new UPI transactions
+            </button>
+          </div>
+        </section>
+
+        <section class="panel report-panel" aria-labelledby="report-title">
+          <div class="panel-heading report-heading">
+            <div>
+              <p class="eyebrow">MONTHLY OVERVIEW</p>
+              <h2 id="report-title">Expense vs budget report</h2>
+            </div>
+            <div class="report-actions">
+              <span id="report-period" class="period-label"></span>
+              <button id="export-report" class="button button-secondary" type="button">
+                Download CSV
+              </button>
+            </div>
+          </div>
+          <div class="report-summary">
+            <article class="report-stat">
+              <span class="report-stat-label">Total spent</span>
+              <strong id="report-spent">₹0</strong>
+            </article>
+            <article class="report-stat">
+              <span class="report-stat-label">Total budget</span>
+              <strong id="report-budget">₹0</strong>
+            </article>
+            <article class="report-stat">
+              <span id="report-balance-label" class="report-stat-label">Available</span>
+              <strong id="report-balance">₹0</strong>
+            </article>
+          </div>
+          <div class="transaction-table-wrap">
+            <table class="transaction-table report-table">
+              <thead>
+                <tr>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="amount-column">Spent</th>
+                  <th scope="col" class="amount-column">Budget</th>
+                  <th scope="col" class="amount-column">Remaining</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="report-body"></tbody>
+              <tfoot id="report-foot"></tfoot>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel transactions-panel" aria-labelledby="transactions-title">
+          <div class="panel-heading transactions-heading">
+            <div>
+              <p class="eyebrow">YOUR ACTIVITY</p>
+              <h2 id="transactions-title">Recent expenses</h2>
+            </div>
+            <label class="filter-label">
+              <span class="visually-hidden">Filter by payment method</span>
+              <select id="method-filter" aria-label="Filter by payment method">
+                <option value="all">All payments</option>
+                <option value="upi">UPI only</option>
+                <option value="cash">Cash only</option>
+              </select>
+            </label>
+          </div>
+          <div class="transaction-table-wrap">
+            <table class="transaction-table">
+              <thead>
+                <tr>
+                  <th scope="col">Expense</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Paid using</th>
+                  <th scope="col" class="amount-column">Amount</th>
+                  <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="transaction-list"></tbody>
+            </table>
+            <div id="transactions-empty" class="empty-state" hidden>
+              <span class="empty-icon" aria-hidden="true">✦</span>
+              <h3>No expenses yet</h3>
+              <p>Your expenses for this month will show up here.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <span>Paisa<span class="brand-dot">.</span></span>
+        <span>Your data stays on this device.</span>
+      </footer>
+      <div id="app-message" class="app-message" role="alert" hidden></div>
+    </div>
+  </body>
+</html>

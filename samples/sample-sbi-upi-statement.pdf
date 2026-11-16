@@ -1,0 +1,77 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 2004 >>
+stream
+0.95 0.95 0.97 rg 0 0 612 792 re f
+1 1 1 rg 32 32 548 728 re f
+0.75 0.08 0.12 rg 40 690 532 32 re f
+1 1 1 rg
+BT /F1 14 Tf 52 701 Td (DEMO ONLY -- NOT AN OFFICIAL BANK STATEMENT) Tj ET
+0.12 0.15 0.22 rg
+BT /F1 20 Tf 40 752 Td (SBI UPI Statement Sample) Tj ET
+BT /F1 9 Tf 40 672 Td (Synthetic fixture for local testing. All names, dates, references, and amounts are invented.) Tj ET
+BT /F1 9 Tf 40 654 Td (Only the two UPI debit rows should be imported.) Tj ET
+0.86 0.88 0.92 RG 40 628 m 572 628 l S
+0.12 0.15 0.22 rg
+BT /F1 9 Tf 40 608 Td (Txn Date) Tj ET
+BT /F1 9 Tf 112 608 Td (Description / Narration) Tj ET
+BT /F1 9 Tf 322 608 Td (Debit) Tj ET
+BT /F1 9 Tf 390 608 Td (Credit) Tj ET
+BT /F1 9 Tf 470 608 Td (Reference) Tj ET
+0.86 0.88 0.92 RG 40 598 m 572 598 l S
+BT /F1 9 Tf 40 578 Td (05 Nov 2026) Tj ET
+BT /F1 9 Tf 112 578 Td (UPI/DR/001234/LOCAL CAFE) Tj ET
+BT /F1 9 Tf 322 578 Td (245.00) Tj ET
+BT /F1 9 Tf 390 578 Td (-) Tj ET
+BT /F1 9 Tf 470 578 Td (325987654321) Tj ET
+0.92 0.93 0.95 RG 40 568 m 572 568 l S
+BT /F1 9 Tf 40 548 Td (07 Nov 2026) Tj ET
+BT /F1 9 Tf 112 548 Td (UPI/DR/002345/BOOK SHOP) Tj ET
+BT /F1 9 Tf 322 548 Td (580.00) Tj ET
+BT /F1 9 Tf 390 548 Td (-) Tj ET
+BT /F1 9 Tf 470 548 Td (325987654322) Tj ET
+0.92 0.93 0.95 RG 40 538 m 572 538 l S
+BT /F1 9 Tf 40 518 Td (08 Nov 2026) Tj ET
+BT /F1 9 Tf 112 518 Td (UPI/CR/007890/REFUND) Tj ET
+BT /F1 9 Tf 322 518 Td (-) Tj ET
+BT /F1 9 Tf 390 518 Td (100.00) Tj ET
+BT /F1 9 Tf 470 518 Td (325987654323) Tj ET
+0.92 0.93 0.95 RG 40 508 m 572 508 l S
+BT /F1 9 Tf 40 488 Td (09 Nov 2026) Tj ET
+BT /F1 9 Tf 112 488 Td (POS/DEBIT/RETAIL STORE) Tj ET
+BT /F1 9 Tf 322 488 Td (325.00) Tj ET
+BT /F1 9 Tf 390 488 Td (-) Tj ET
+BT /F1 9 Tf 470 488 Td (POS0000042) Tj ET
+0.92 0.93 0.95 RG 40 478 m 572 478 l S
+0.75 0.08 0.12 rg
+BT /F1 10 Tf 40 425 Td (DEMO DATA ONLY -- NOT FROM SBI. Do not use for financial records.) Tj ET
+0.35 0.38 0.44 rg
+BT /F1 8 Tf 40 407 Td (The UPI credit and non-UPI debit rows are included to test import filtering.) Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000317 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2372
+%%EOF
